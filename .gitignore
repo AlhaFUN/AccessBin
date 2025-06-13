@@ -1,0 +1,16 @@
+# Virtual Environment
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Instance folder (contains database and secrets)
+instance/
+
+# Uploads folder (we don't want to track user uploads in Git)
+uploads/
+
+# IDE / Editor specific files
+.vscode/
+.idea/

@@ -1,0 +1,18 @@
+<!-- templates/download.html (NEW FILE) -->
+{% extends "base.html" %}
+{% block content %}
+    <div class="download-container">
+        <h2>{{ file.original_filename }}</h2>
+        <p>Ready to download.</p>
+        
+        <!-- THE BIG DOWNLOAD BUTTON -->
+        <a href="{{ url_for('download_file', file_id=file.id) }}" class="download-button">
+            Download {{ file.original_filename }}
+        </a>
+    </div>
+
+    <!-- Example Ad Placeholder -->
+    <div class="ad-placeholder">
+        Ad Space (728x90)
+    </div>
+{% endblock %}

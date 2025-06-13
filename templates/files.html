@@ -1,0 +1,20 @@
+<!-- templates/files.html (NEW FILE) -->
+{% extends "base.html" %}
+{% block content %}
+    <h2>Your Uploaded Files</h2>
+    {% if files %}
+        <ul>
+            {% for file in files %}
+                <li>
+                    <!-- THIS NOW LINKS TO THE DEDICATED DOWNLOAD PAGE -->
+                    <a href="{{ url_for('download_page', file_id=file.id) }}">
+                        {{ file.original_filename }}
+                    </a>
+                    <small>(Uploaded on: {{ file.upload_date.strftime('%Y-%m-%d %H:%M') }})</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't uploaded any files yet. <a href="{{ url_for('upload') }}">Upload one now!</a></p>
+    {% endif %}
+{% endblock %}

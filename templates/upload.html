@@ -1,0 +1,107 @@
+<!-- templates/upload.html (NEW VERSION) -->
+{% extends "base.html" %}
+{% block content %}
+    <h2>Upload a New File</h2>
+    
+    <!-- We give the form an ID so JavaScript can find it -->
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" id="file-input" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <!-- Container for the progress bar and stats. Initially hidden. -->
+    <div id="progress-container" style="display: none; margin-top: 1em;">
+        <div id="progress-bar-container" style="width: 100%; background-color: #f3f3f3; border: 1px solid #ccc;">
+            <div id="progress-bar" style="width: 0%; height: 30px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;">
+                0%
+            </div>
+        </div>
+        <div id="progress-stats" style="margin-top: 0.5em;">
+            <span id="upload-speed">Speed: 0 MB/s</span> | 
+            <span id="time-remaining">ETA: --:--</span>
+        </div>
+    </div>
+    <div id="upload-status"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('upload-form');
+    const fileInput = document.getElementById('file-input');
+    
+    // Progress Bar Elements
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const uploadStatus = document.getElementById('upload-status');
+    const uploadSpeedEl = document.getElementById('upload-speed');
+    const timeRemainingEl = document.getElementById('time-remaining');
+
+    let startTime;
+
+    form.addEventListener('submit', function(event) {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        const file = fileInput.files[0];
+        if (!file) {
+            uploadStatus.textContent = 'Please select a file first.';
+            return;
+        }
+
+        // Show the progress bar and reset values
+        progressContainer.style.display = 'block';
+        progressBar.style.width = '0%';
+        progressBar.textContent = '0%';
+        uploadStatus.textContent = '';
+        startTime = new Date().getTime();
+
+        // Create a FormData object to send the file
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Use XMLHttpRequest to get progress events
+        const xhr = new XMLHttpRequest();
+
+        // Listen for progress events
+        xhr.upload.addEventListener('progress', function(e) {
+            if (e.lengthComputable) {
+                const percentComplete = (e.loaded / e.total) * 100;
+                progressBar.style.width = percentComplete.toFixed(2) + '%';
+                progressBar.textContent = percentComplete.toFixed(0) + '%';
+                
+                // Calculate speed and ETA
+                const elapsedTime = (new Date().getTime() - startTime) / 1000; // in seconds
+                if (elapsedTime > 0) {
+                    const speed = e.loaded / elapsedTime; // bytes per second
+                    const remainingBytes = e.total - e.loaded;
+                    const eta = remainingBytes / speed; // seconds
+
+                    uploadSpeedEl.textContent = `Speed: ${(speed / 1024 / 1024).toFixed(2)} MB/s`;
+                    timeRemainingEl.textContent = `ETA: ${new Date(eta * 1000).toISOString().substr(14, 5)}`;
+                }
+            }
+        });
+
+        // Handle completion
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // The backend now redirects on success, but since this is an XHR request,
+                // the browser won't follow it. We do it manually in JS.
+                uploadStatus.innerHTML = `✅ Upload complete! Redirecting...`;
+                window.location.href = "{{ url_for('index') }}";
+            } else {
+                uploadStatus.textContent = `❌ Error during upload: ${xhr.statusText}`;
+            }
+        };
+
+        // Handle errors
+        xhr.onerror = function() {
+            uploadStatus.textContent = '❌ An error occurred. Please try again.';
+        };
+
+        // Send the request to the same /upload endpoint
+        xhr.open('POST', "{{ url_for('upload') }}", true);
+        xhr.send(formData);
+    });
+});
+</script>
+{% endblock %}

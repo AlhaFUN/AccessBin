@@ -1,0 +1,51 @@
+/* static/styles.css */
+body { font-family: sans-serif; margin: 0; }
+nav { background: #333; color: white; padding: 1em; display: flex; gap: 1em; align-items: center; }
+nav a { color: white; text-decoration: none; }
+nav span { margin-left: auto; }
+main { max-width: 800px; margin: 2em auto; padding: 1em; }
+form { display: flex; flex-direction: column; gap: 0.5em; max-width: 300px; }
+.flashes { list-style: none; padding: 0.5em; border: 1px solid #ff4d4d; background: #ffb3b3; color: #b30000; }
+/* static/styles.css (ADD THIS TO THE END) */
+
+/* Ad Placeholder Style */
+.ad-placeholder {
+    width: 728px;
+    height: 90px;
+    border: 2px dashed #ccc;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2em auto;
+    font-family: monospace;
+    color: #999;
+}
+
+/* Download Page Styles */
+.download-container {
+    text-align: center;
+    padding: 3em;
+    border: 1px solid #eee;
+    margin-top: 2em;
+    background: #fafafa;
+}
+
+.download-button {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.download-button:hover {
+    background-color: #218838;
+}

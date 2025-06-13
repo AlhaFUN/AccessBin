@@ -1,0 +1,17 @@
+<!-- templates/index.html (NEW VERSION) -->
+{% extends "base.html" %}
+{% block content %}
+    <h1>Welcome to Your Personal File Hoster</h1>
+    <p>This is your secure, private space to store and manage your files.</p>
+    
+    {% if not current_user.is_authenticated %}
+    <p>Please <a href="{{ url_for('login') }}">login</a> to get started, or contact the site administrator to get an account.</p>
+    {% else %}
+    <p>Go to <a href="{{ url_for('my_files') }}">My Files</a> to see your uploads or <a href="{{ url_for('upload') }}">upload</a> a new file.</p>
+    {% endif %}
+
+    <!-- Example Ad Placeholder -->
+    <div class="ad-placeholder">
+        Ad Space (728x90)
+    </div>
+{% endblock %}
