@@ -113,3 +113,6 @@ def upload():
             flash(f'File "{original_filename}" uploaded successfully!', 'success')
             return redirect(url_for('my_files'))
     return render_template('upload.html')
+
+port = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=port)
